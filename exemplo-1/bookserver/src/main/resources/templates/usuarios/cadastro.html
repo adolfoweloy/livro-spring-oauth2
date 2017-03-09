@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>bookserver-client</title>
+    <link href="webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+</head>
+
+<body>
+
+<br/>
+<div class="container">
+
+    <div class="jumbotron">
+        <h1>Bookserver</h1>
+    </div>
+
+    <h2>Cadastre-se</h2>
+
+    <form action="#" th:action="@{/usuarios}" th:object="${dadosDeRegistro}" method="post">
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input class="form-control" id="nome" type="text" th:field="*{nome}"/>
+            <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}">preencher o nome</div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input class="form-control" id="email" type="text" th:field="*{email}"/>
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">preencher o email</div>
+        </div>
+
+        <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input class="form-control" id="senha" type="password" th:field="*{senha}"/>
+            <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}">preencher a senha</div>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Enviar</button>
+            <button class="btn btn-default" type="button" onclick="javascript: window.location.href='/'">Cancelar</button>
+        </div>
+    </form>
+
+</div>
+</body>
+
+<script src="/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</html>
