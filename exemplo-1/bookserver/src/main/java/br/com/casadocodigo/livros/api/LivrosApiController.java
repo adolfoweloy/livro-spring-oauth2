@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping({"/api/livros", "/api/v2/livros"})
+@RequestMapping("/api/livros")
 public class LivrosApiController {
 
     @Autowired
@@ -33,17 +33,6 @@ public class LivrosApiController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> adicionarLivro(@RequestBody Livro livro) {
-        Usuario usuario = usuarioLogado();
-
-        usuario.getEstante().adicionar(livro);
-
-        usuarios.atualizar(usuario);
-
-        return new ResponseEntity<>(livro, HttpStatus.CREATED);
     }
 
     private Usuario usuarioLogado() {
