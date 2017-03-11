@@ -14,13 +14,6 @@ public class ConfiguracaoDeSeguranca {
 
 	@Configuration
 	public static class ConfiguracaoParaUsuario extends WebSecurityConfigurerAdapter {
-		@Autowired
-		private DadosDoUsuarioService userAuthenticationService;
-
-		@Override
-		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userAuthenticationService);
-		}
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
