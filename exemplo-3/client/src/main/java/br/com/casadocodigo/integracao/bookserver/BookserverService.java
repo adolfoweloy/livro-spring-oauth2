@@ -1,5 +1,6 @@
 package br.com.casadocodigo.integracao.bookserver;
 
+import br.com.casadocodigo.configuracao.seguranca.BasicAuthentication;
 import br.com.casadocodigo.integracao.model.Livro;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,16 +21,18 @@ import java.util.List;
 @Service
 public class BookserverService {
 
-    public List<Livro> livros(Credenciais credenciais) throws UsuarioSemAutorizacaoException {
+    public List<Livro> livros(BasicAuthentication credenciais) throws UsuarioSemAutorizacaoException {
         RestTemplate restTemplate = new RestTemplate();
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add("Authorization", "Basic " + credenciais.getBase64Encoded());
+        headers.add("Authorization", "Basic " + credenciais.getCredenciaisBase64());
 
         String endpoint = "http://localhost:8080/api/livros";
 
         RequestEntity<Object> request = new RequestEntity<Object>(
-            headers, HttpMethod.GET, URI.create(endpoint)
+            headers,
+            HttpMethod.GET,
+            URI.create(endpoint)
         );
 
         try {
@@ -55,19 +58,4 @@ public class BookserverService {
         return lista;
     }
 
-    @AllArgsConstructor
-    public static class Credenciais {
-
-        @Getter
-        private String login;
-
-        @Getter
-        private String senha;
-
-        public String getBase64Encoded() {
-            String credenciais = login + ":" + senha;
-            return new String(
-                    Base64.getEncoder().encode(credenciais.getBytes()));
-        }
-    }
 }

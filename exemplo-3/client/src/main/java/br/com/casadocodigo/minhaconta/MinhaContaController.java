@@ -1,5 +1,6 @@
 package br.com.casadocodigo.minhaconta;
 
+import br.com.casadocodigo.configuracao.seguranca.BasicAuthentication;
 import br.com.casadocodigo.integracao.bookserver.BookserverService;
 import br.com.casadocodigo.integracao.bookserver.UsuarioSemAutorizacaoException;
 import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
@@ -31,8 +32,8 @@ public class MinhaContaController {
 
         ModelAndView mv = new ModelAndView("minhaconta/principal");
 
-        BookserverService.Credenciais credenciais =
-                new BookserverService.Credenciais(login, senha);
+        BasicAuthentication credenciais =
+                new BasicAuthentication(login, senha);
 
         try {
             mv.addObject("livros", bookserverService.livros(credenciais));
