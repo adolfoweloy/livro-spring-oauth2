@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+    <link href="webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+</head>
+
+<body>
+
+    <br/>
+    <div class="container">
+        <div class="jumbotron">
+
+            <h1>Bookserver</h1>
+            <p>
+               Esse é o sistema onde você registra os livros que já leu!!!
+            </p>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <h3>Login</h3>
+
+                <p sec:authorize="isAuthenticated()">
+                    Você está acessando o sistema de controle de livros como
+                    <span sec:authentication="name">fulano</span>
+                </p>
+                <p sec:authorize="not isAuthenticated()">
+                    Faça login para poder visualizar seus livros e como você classificou cada um.
+                </p>
+
+                <p>
+                    <div sec:authorize="not isAuthenticated()">
+                        <a class="btn btn-primary" href="/login">Login</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="btn btn-danger" href="/logout">Logout</a>
+                    </div>
+                </p>
+            </div>
+
+            <div class="col-md-6">
+
+                <h3>Veja os livros que você já cadastrou</h3>
+                <p>
+                    Aqui você pode ver os livros que já cadastrou ou adicionar novos livros.
+                    Lembre-se que ao registrar um livro você deve informar uma nota!
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/livros/principal">Controle de livros</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script src="/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</html>

@@ -1,0 +1,19 @@
+server:
+  port: 9000
+
+spring:
+  http.converters.preferred-json-mapper: jackson
+  thymeleaf:
+    cache: false
+  datasource:
+    url: jdbc:mysql://localhost/clientapp
+    username: clientapp
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        show_sql: true
+        hbm2ddl:
+          auto: validate
