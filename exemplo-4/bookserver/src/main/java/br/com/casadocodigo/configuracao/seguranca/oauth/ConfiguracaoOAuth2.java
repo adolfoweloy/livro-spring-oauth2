@@ -32,7 +32,7 @@ public class ConfiguracaoOAuth2 {
                 .authorizeRequests()
                     .anyRequest().authenticated().and()
                 .requestMatchers()
-                    .antMatchers("/api/v2/livros");
+                    .antMatchers("/api/v2/**");
         }
     }
 
