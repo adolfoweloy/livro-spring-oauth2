@@ -1,0 +1,7 @@
+server:
+  port: 9000
+
+spring:
+  http.converters.preferred-json-mapper: jackson
+  thymeleaf:
+    cache: false

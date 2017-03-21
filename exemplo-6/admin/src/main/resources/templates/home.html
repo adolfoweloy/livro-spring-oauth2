@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+    <link href="webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+    <title>admin</title>
+</head>
+
+<body>
+
+    <br/>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Dashboard de administração</h1>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-5">
+
+                <h3>Sistema de livros (bookserver)</h3>
+                <p>
+                    Status da aplicação: <b>OK</b>
+                </p>
+                <p>
+                    Quantidade de livros cadastrados até agora: <b th:text="${quantidadeDeLivros}">?</b>
+                </p>
+
+            </div>
+
+            <div class="col-md-5">
+
+                <h3>Sistema de revistas(fictício)</h3>
+                <p>
+                    Status da aplicação: <b>OK</b>
+                </p>
+                <p>
+                    Quantidade de revistas publicadas: <b>150</b>
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script src="/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</html>
