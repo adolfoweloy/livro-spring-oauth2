@@ -18,7 +18,7 @@ import java.util.Arrays;
 @Service
 public class ClientCredentialsTokenService {
 
-    public OAuth2Token getToken(String loginDoUsuario, String senhaDoUsuario) {
+    public OAuth2Token getToken() {
 
         RestTemplate restTemplate = new RestTemplate();
         BasicAuthentication clientAuthentication = new BasicAuthentication("cliente-admin", "123abc");

@@ -17,7 +17,7 @@ public class DashboardController {
     public ModelAndView inicio() {
         ModelAndView mv = new ModelAndView("home");
 
-        int quantidadeDeLivros = bookserverService.getQuantidadeDeLivrosCadastrados();
+        long quantidadeDeLivros = bookserverService.getQuantidadeDeLivrosCadastrados();
         mv.addObject("quantidadeDeLivros", quantidadeDeLivros);
 
         return mv;
