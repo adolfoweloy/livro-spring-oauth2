@@ -19,13 +19,6 @@ public class ConfiguracaoOAuthDB {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "jdbcTemplateOAuth")
-    public JdbcTemplate postgresJdbcTemplate(
-        @Qualifier("dsOauth") DataSource dsOAuth) {
-
-        return new JdbcTemplate(dsOAuth);
-    }
-
     @Primary
     @Bean(name = "dsBookserver")
     @ConfigurationProperties(prefix = "spring.ds-bookserver")

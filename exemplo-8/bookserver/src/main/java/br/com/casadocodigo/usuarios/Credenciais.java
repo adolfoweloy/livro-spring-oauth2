@@ -4,8 +4,10 @@ import javax.persistence.Embeddable;
 
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Embeddable
-public class Credenciais {
+public class Credenciais implements Serializable {
 
 	@Getter
 	private String email;

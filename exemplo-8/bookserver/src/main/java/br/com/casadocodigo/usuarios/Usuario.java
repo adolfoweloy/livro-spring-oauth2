@@ -12,8 +12,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.casadocodigo.livros.Estante;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 @Entity
-public class Usuario {
+public class Usuario implements Serializable {
 
 	@Getter
 	@Id
