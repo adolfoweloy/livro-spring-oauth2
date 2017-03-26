@@ -57,6 +57,7 @@ public class ConfiguracaoOAuth2 {
                 .secret("123456")
                 .scopes("read", "write")
                 .resourceIds(RESOURCE_ID)
+                .authorities("read", "write")
                 .authorizedGrantTypes(
                     "password", "authorization_code")
             .and()
