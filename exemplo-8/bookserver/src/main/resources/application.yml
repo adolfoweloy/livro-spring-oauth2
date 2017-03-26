@@ -9,13 +9,19 @@ oauth:
   enabled: true
   all-in-one: true
 
-## configurações do datasource do spring
+## multiplas configurações de datasource do spring
 spring:
-  datasource:
+  ds-bookserver:
     url: jdbc:mysql://localhost/bookserver
     username: bookserver
     password: 123
     driver-class-name: com.mysql.jdbc.Driver
+  ds-oauth:
+    url: jdbc:mysql://localhost/bookserver_oauth
+    username: bookserver_oauth
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+
   jpa:
     properties:
       hibernate:
