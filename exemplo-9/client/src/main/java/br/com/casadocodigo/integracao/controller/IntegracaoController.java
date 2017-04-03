@@ -7,15 +7,21 @@ import br.com.casadocodigo.usuarios.AcessoBookserver;
 import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.annotation.ApplicationScope;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/integracao")
+@RequestScope
 public class IntegracaoController {
 
     @Autowired
@@ -23,6 +29,9 @@ public class IntegracaoController {
 
     @Autowired
     private AuthorizationCodeTokenService authorizationCodeTokenService;
+
+    @Autowired
+    private OAuth2RestOperations restTemplate;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView integracao() {
@@ -36,15 +45,7 @@ public class IntegracaoController {
     @RequestMapping(method = RequestMethod.GET, value = "/callback")
     public ModelAndView autorizar(String code) {
 
-        OAuth2Token token = authorizationCodeTokenService.getToken(code);
-
-        AcessoBookserver acessoBookserver = new AcessoBookserver();
-        acessoBookserver.setAcessoToken(token.getAccessToken());
-
-        Usuario usuario = usuarioLogado();
-        usuario.setAcessoBookserver(acessoBookserver);
-
-        usuarios.save(usuario);
+        OAuth2AccessToken accessToken = restTemplate.getAccessToken();
 
         return new ModelAndView("redirect:/minhaconta/principal");
     }
