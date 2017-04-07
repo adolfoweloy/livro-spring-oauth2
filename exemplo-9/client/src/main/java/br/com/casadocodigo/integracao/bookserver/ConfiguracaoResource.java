@@ -2,6 +2,7 @@ package br.com.casadocodigo.integracao.bookserver;
 
 import br.com.casadocodigo.usuarios.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -32,12 +33,14 @@ public class ConfiguracaoResource {
     @Autowired
     private UsuariosRepository usuariosRepository;
 
-    @Autowired
-    private BookserverClientTokenServices clientTokenServices;
+    @Bean
+    public ClientTokenServices clientTokenServices() {
+        return new BookserverClientTokenServices(usuariosRepository);
+    }
 
     @Bean
     public OAuth2ProtectedResourceDetails bookserver() {
-        AuthorizationCodeResourceDetails detailsForBookserver = new AuthorizationCodeResourceDetails();
+        ClientCredentialAuthorizationCodeResourceDetails detailsForBookserver = new ClientCredentialAuthorizationCodeResourceDetails();
 
         detailsForBookserver.setId("bookserver");
         detailsForBookserver.setTokenName("oauth_token");
@@ -56,8 +59,9 @@ public class ConfiguracaoResource {
         detailsForBookserver.setScope(Arrays.asList("read", "write"));
 
         // url de redirecionamento
-        detailsForBookserver.setPreEstablishedRedirectUri(("http://localhost:9000/integracao/callback"));
-        detailsForBookserver.setUseCurrentUri(false);
+//        detailsForBookserver.setPreEstablishedRedirectUri(("http://localhost:9000/integracao/callback"));
+//        detailsForBookserver.setUseCurrentUri(false);
+
 
         detailsForBookserver.setClientAuthenticationScheme(AuthenticationScheme.header);
         return detailsForBookserver;
@@ -72,32 +76,30 @@ public class ConfiguracaoResource {
     }
 
     @Autowired
+    @Qualifier("accessTokenRequest")
     private AccessTokenRequest accessTokenRequest;
 
     @Bean
     @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
-    public OAuth2RestOperations restTemplate() {
-        OAuth2RestTemplate template = new OAuth2RestTemplate(bookserver(),
+    public OAuth2RestOperations oAuth2RestOperations() {
+
+        OAuth2RestTemplate template = new OAuth2RestTemplate(bookserver(), new DefaultOAuth2ClientContext(accessTokenRequest));
+
+        new OAuth2RestTemplate(bookserver(),
                 new DefaultOAuth2ClientContext(accessTokenRequest));
 
-        AccessTokenProviderChain provider = new AccessTokenProviderChain(Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
-        provider.setClientTokenServices(clientTokenServices);
+        AccessTokenProviderChain provider = new AccessTokenProviderChain(Arrays.asList(
+                new AuthorizationCodeAccessTokenProvider()));
+
+        provider.setClientTokenServices(clientTokenServices());
+        template.setAccessTokenProvider(provider);
         return template;
     }
 
-//    @Bean
-//    public OAuth2RestTemplate bookserverRestTemplate(OAuth2ClientContext clientContext) {
-//
-//        OAuth2RestTemplate template = new OAuth2RestTemplate(bookserver(), clientContext);
-//
-//        AccessTokenProviderChain accessTokenProvider = new AccessTokenProviderChain(
-//                Arrays.<AccessTokenProvider> asList(new AuthorizationCodeAccessTokenProvider())
-//        );
-//
-//        accessTokenProvider.setClientTokenServices(clientTokenServices);
-//
-//        template.setAccessTokenProvider(accessTokenProvider);
-//
-//        return template;
-//    }
+    public static class ClientCredentialAuthorizationCodeResourceDetails extends AuthorizationCodeResourceDetails {
+        @Override
+        public boolean isClientOnly() {
+            return true;
+        }
+    }
 }

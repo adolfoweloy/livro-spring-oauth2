@@ -10,23 +10,28 @@ import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResour
 import org.springframework.security.oauth2.client.token.ClientTokenServices;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.stereotype.Component;
 
-@Component
 public class BookserverClientTokenServices implements ClientTokenServices {
 
-    @Autowired
     private UsuariosRepository usuarios;
+
+    public BookserverClientTokenServices(UsuariosRepository usuarios) {
+        this.usuarios = usuarios;
+    }
 
     @Override
     public OAuth2AccessToken getAccessToken(OAuth2ProtectedResourceDetails resource, Authentication authentication) {
         UsuarioLogado usuarioLogado = (UsuarioLogado) authentication.getPrincipal();
         Usuario usuario = usuarios.findById(usuarioLogado.getId());
 
-        OAuth2AccessToken accessToken = new DefaultOAuth2AccessToken(
-            usuario.getAcessoBookserver().getAcessoToken());
+        String accessToken = usuario.getAcessoBookserver().getAcessoToken();
 
-        return accessToken;
+        if (accessToken == null) return null;
+
+        DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(
+            accessToken);
+
+        return oAuth2AccessToken;
     }
 
     @Override

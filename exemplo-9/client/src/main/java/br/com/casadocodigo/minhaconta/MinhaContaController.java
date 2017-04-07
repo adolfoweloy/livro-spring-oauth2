@@ -28,7 +28,7 @@ public class MinhaContaController {
         ModelAndView mv = new ModelAndView("minhaconta/principal");
 
         try {
-            mv.addObject("livros", bookserverService.livrosFrom(usuarioLogado()));
+            mv.addObject("livros", bookserverService.livrosFromCurrentUser());
         } catch (UsuarioSemAutorizacaoException e) {
             mv.addObject("erro", e.getMessage());
         }

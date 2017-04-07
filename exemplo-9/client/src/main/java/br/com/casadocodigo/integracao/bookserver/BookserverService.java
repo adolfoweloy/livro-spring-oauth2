@@ -30,23 +30,15 @@ public class BookserverService {
     @Autowired
     private OAuth2RestOperations oAuth2RestTemplate;
 
-    public List<Livro> livrosFrom(Usuario usuario) throws UsuarioSemAutorizacaoException {
+    public List<Livro> livrosFromCurrentUser() throws UsuarioSemAutorizacaoException {
 
         String endpoint = "http://localhost:8080/api/v2/livros";
 
         try {
-//            oAuth2RestTemplate
 
-            String token = usuario.getAcessoBookserver().getAcessoToken();
-            JsonNode resposta = oAuth2RestTemplate.getForObject(endpoint, JsonNode.class);
+            Livro[] livros = oAuth2RestTemplate.getForObject(endpoint, Livro[].class);
+            return listaFromArray(livros);
 
-            System.out.println(resposta);
-            return null;
-//            if (resposta.getStatusCode().is2xxSuccessful()) {
-//                return listaFromArray(resposta.getBody());
-//            } else {
-//                throw new RuntimeException("sem sucesso");
-//            }
         } catch (HttpClientErrorException e) {
             System.out.println("erro" + e.getMessage());
             throw new UsuarioSemAutorizacaoException("não foi possível obter os livros do usuário");
