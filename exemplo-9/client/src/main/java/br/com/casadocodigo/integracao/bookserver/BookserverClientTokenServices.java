@@ -4,12 +4,13 @@ import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
 import br.com.casadocodigo.usuarios.AcessoBookserver;
 import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.UsuariosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.ClientTokenServices;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+
+import java.util.Calendar;
 
 public class BookserverClientTokenServices implements ClientTokenServices {
 
@@ -25,11 +26,13 @@ public class BookserverClientTokenServices implements ClientTokenServices {
         Usuario usuario = usuarios.findById(usuarioLogado.getId());
 
         String accessToken = usuario.getAcessoBookserver().getAcessoToken();
+        Calendar dataDeExpiracao = usuario.getAcessoBookserver().getDataDeExpiracao();
 
         if (accessToken == null) return null;
 
-        DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(
-            accessToken);
+        DefaultOAuth2AccessToken oAuth2AccessToken
+            = new DefaultOAuth2AccessToken(accessToken);
+        oAuth2AccessToken.setExpiration(dataDeExpiracao.getTime());
 
         return oAuth2AccessToken;
     }
@@ -40,6 +43,11 @@ public class BookserverClientTokenServices implements ClientTokenServices {
 
         AcessoBookserver acessoBookserver = new AcessoBookserver();
         acessoBookserver.setAcessoToken(accessToken.getValue());
+
+        Calendar expirationDate = Calendar.getInstance();
+        expirationDate.setTime(accessToken.getExpiration());
+
+        acessoBookserver.setDataDeExpiracao(expirationDate);
 
         UsuarioLogado usuarioLogado = (UsuarioLogado) authentication.getPrincipal();
         Usuario usuario = usuarios.findById(usuarioLogado.getId());

@@ -1,27 +1,13 @@
 package br.com.casadocodigo.integracao.bookserver;
 
-import br.com.casadocodigo.configuracao.seguranca.BasicAuthentication;
 import br.com.casadocodigo.integracao.model.Livro;
-import br.com.casadocodigo.usuarios.Usuario;
-import com.fasterxml.jackson.databind.JsonNode;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @Service
