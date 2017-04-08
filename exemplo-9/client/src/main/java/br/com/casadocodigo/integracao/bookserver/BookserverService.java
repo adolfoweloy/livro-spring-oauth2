@@ -1,32 +1,48 @@
 package br.com.casadocodigo.integracao.bookserver;
 
+import br.com.casadocodigo.configuracao.seguranca.BasicAuthentication;
 import br.com.casadocodigo.integracao.model.Livro;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
 public class BookserverService {
 
-    @Autowired
-    private OAuth2RestOperations oAuth2RestTemplate;
+    public List<Livro> livros(String token) throws UsuarioSemAutorizacaoException {
+        RestTemplate restTemplate = new RestTemplate();
 
-    public List<Livro> livrosFromCurrentUser() throws UsuarioSemAutorizacaoException {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Authorization", "Bearer " + token);
 
         String endpoint = "http://localhost:8080/api/v2/livros";
 
+        RequestEntity<Object> request = new RequestEntity<>(
+            headers,
+            HttpMethod.GET,
+            URI.create(endpoint)
+        );
+
         try {
-
-            Livro[] livros = oAuth2RestTemplate.getForObject(endpoint, Livro[].class);
-            return listaFromArray(livros);
-
+            ResponseEntity<Livro[]> resposta = restTemplate.exchange(request, Livro[].class);
+            if (resposta.getStatusCode().is2xxSuccessful()) {
+                return listaFromArray(resposta.getBody());
+            } else {
+                throw new RuntimeException("sem sucesso");
+            }
         } catch (HttpClientErrorException e) {
-            System.out.println("erro" + e.getMessage());
             throw new UsuarioSemAutorizacaoException("não foi possível obter os livros do usuário");
         }
 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>bookserver-client</title>
+    <link href="../webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+</head>
+<body>
+<br/>
+<div class="container">
+
+    <div class="jumbotron">
+        <h1>Client</h1>
+    </div>
+
+    <h3>Olá <span sec:authentication="name">fulano</span></h3>
+
+    <hr/>
+
+
+    <h4>Dados extraídos do fragmento de url</h4>
+    <table class="table">
+        <tr>
+            <td class="col-md-2">access_token</td>
+            <td><div class="access-token"></div></td>
+        </tr>
+        <tr>
+            <td class="col-md-2">token_type</td>
+            <td><div class="token-type"></div></td>
+        </tr>
+        <tr>
+            <td class="col-md-2">expires-in</td>
+            <td><div class="expires-in"></div></td>
+        </tr>
+    </table>
+
+    <h4>Livros</h4>
+    <hr/>
+    <div class="row livros">
+
+    </div>
+    <hr/>
+    <br/>
+    <button class="btn btn-default" type="button" onclick="javascript: window.location.href='/home'">Voltar</button>
+
+</div>
+</body>
+
+<script src="/jquery.min.js"></script>
+<script src="../webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="/oauth.js"></script>
+<script src="/livros.js"></script>
+
+<script>
+$(function() {
+    var tokenResponse = oauth.getTokenResponse();
+    $('.access-token').text(tokenResponse.access_token);
+    $('.token-type').text(tokenResponse.token_type);
+    $('.expires-in').text(tokenResponse.expires_in);
+
+    livros.getTitulos(tokenResponse.access_token, function($div) {
+        $('.livros').append($div);
+    });
+});
+</script>
+
+</html>

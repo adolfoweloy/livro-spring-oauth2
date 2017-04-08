@@ -25,13 +25,10 @@ public class MinhaContaController {
     @RequestMapping(value = "/principal")
     public ModelAndView principal() {
 
-        Usuario usuario = usuarioLogado();
-        String token = usuario.getAcessoBookserver().getAcessoToken();
-
         ModelAndView mv = new ModelAndView("minhaconta/principal");
 
         try {
-            mv.addObject("livros", bookserverService.livros(token));
+            mv.addObject("livros", bookserverService.livrosFromCurrentUser());
         } catch (UsuarioSemAutorizacaoException e) {
             mv.addObject("erro", e.getMessage());
         }

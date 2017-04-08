@@ -27,12 +27,11 @@ import java.util.Arrays;
 public class ConfiguracaoResource {
 
     @Autowired
-    private UsuariosRepository usuariosRepository;
+    private ClientTokenServices clientTokenServices;
 
-    @Bean
-    public ClientTokenServices clientTokenServices() {
-        return new BookserverClientTokenServices(usuariosRepository);
-    }
+    @Autowired
+    @Qualifier("oauth2ClientContext")
+    private OAuth2ClientContext oauth2ClientContext;
 
     @Bean
     public OAuth2ProtectedResourceDetails bookserver() {
@@ -61,15 +60,14 @@ public class ConfiguracaoResource {
     @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
     public OAuth2RestOperations oauth2RestTemplate() {
 
-        OAuth2ClientContext context = new DefaultOAuth2ClientContext(accessTokenRequest);
         OAuth2ProtectedResourceDetails resourceDetails = bookserver();
 
-        OAuth2RestTemplate template = new OAuth2RestTemplate(resourceDetails, context);
+        OAuth2RestTemplate template = new OAuth2RestTemplate(resourceDetails, oauth2ClientContext);
 
         AccessTokenProviderChain provider = new AccessTokenProviderChain(
             Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
 
-        provider.setClientTokenServices(clientTokenServices());
+        provider.setClientTokenServices(clientTokenServices);
         template.setAccessTokenProvider(provider);
 
         return template;
