@@ -13,7 +13,7 @@ public class DashboardController {
     @Autowired
     private BookserverService bookserverService;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
         ModelAndView mv = new ModelAndView("home");
 
