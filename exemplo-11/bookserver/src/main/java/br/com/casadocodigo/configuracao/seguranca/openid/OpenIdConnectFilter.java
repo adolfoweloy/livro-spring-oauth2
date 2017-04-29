@@ -34,15 +34,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter {
 
-    @Setter
-    private OAuth2RestOperations restTemplate;
-
-    @Setter
-    private ObjectMapper jsonMapper;
-
-    @Setter
-    private RepositorioDeUsuarios repositorioDeUsuarios;
-
     private ApplicationEventPublisher eventPublisher;
 
     public OpenIdConnectFilter(String defaultFilterProcessesUrl) {
@@ -60,54 +51,8 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
         throws AuthenticationException, IOException, ServletException {
 
-        OAuth2AccessToken accessToken;
-
-        try {
-            accessToken = restTemplate.getAccessToken();
-        } catch (OAuth2Exception e) {
-            BadCredentialsException bad = new BadCredentialsException("Could not obtain access token", e);
-            publish(new OAuth2AuthenticationFailureEvent(bad));
-            throw bad;
-        }
-
-        try {
-            // TODO - acessar userinfo para obter o nome do usuário
-
-            TokenIdClaims tokenIdClaims = obterAsClaimsDoToken(accessToken);
-
-            Usuario usuario = repositorioDeUsuarios.buscarUsuarioAutenticado(
-                    new IdentificadorDeAutorizacao(tokenIdClaims.getSubjectIdentifier())).get();
-
-            UsuarioAutenticado usuarioAutenticado = new UsuarioAutenticado(
-                usuario.getAutenticacaoOpenid(), accessToken);
-
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                usuarioAutenticado, null, usuarioAutenticado.getAuthorities());
-
-            publish(new AuthenticationSuccessEvent(authentication));
-            return authentication;
-
-        } catch (InvalidTokenException e) {
-            BadCredentialsException bad = new BadCredentialsException("Could not obtain user details from token", e);
-            publish(new OAuth2AuthenticationFailureEvent(bad));
-            throw bad;
-        }
-    }
-
-    private TokenIdClaims obterAsClaimsDoToken(OAuth2AccessToken accessToken) {
-        String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
-        Jwt tokenDecoded = JwtHelper.decode(idToken);
-
-        try {
-            return jsonMapper.readValue(tokenDecoded.getClaims(), TokenIdClaims.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    private Date obterDatetime(long timestamp) {
-        return new Date(timestamp * 1000);
+        // implementar a lógica de autenticação via OpenID Connect Aqui
+        throw new UnsupportedOperationException("Falta implementar a lógica de autenticação com OpenID Connect");
     }
 
     private void publish(ApplicationEvent event) {

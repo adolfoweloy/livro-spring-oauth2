@@ -11,14 +11,9 @@ oauth:
 
 ## multiplas configurações de datasource do spring
 spring:
-  ds-bookserver:
+  datasource:
     url: jdbc:mysql://localhost/bookserver
     username: bookserver
-    password: 123
-    driver-class-name: com.mysql.jdbc.Driver
-  ds-oauth:
-    url: jdbc:mysql://localhost/bookserver_oauth
-    username: bookserver_oauth
     password: 123
     driver-class-name: com.mysql.jdbc.Driver
 
@@ -32,10 +27,3 @@ spring:
 
 ## configuracoes open id
 ## informações encontradas no document discovery -> https://accounts.google.com/.well-known/openid-configuration
-google:
-  client_id: <COLOQUE O ID DA SUA APLICACAO AQUI>
-  client_secret: <COLOQUE O SECRED ID DA SUA APLICACAO AQUI>
-  user_authorization_uri: https://accounts.google.com/o/oauth2/v2/auth
-  access_token_uri: https://www.googleapis.com/oauth2/v4/token
-  redirect_uri: http://localhost:8080/google/callback
-  userinfo_endpoint: https://www.googleapis.com/oauth2/v3/userinfo

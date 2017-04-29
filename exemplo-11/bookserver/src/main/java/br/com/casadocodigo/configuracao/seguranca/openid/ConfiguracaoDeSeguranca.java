@@ -18,59 +18,14 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 @EnableWebSecurity
-public class ConfiguracaoDeSeguranca {
+public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
 
-	@Configuration
-	public static class ConfiguracaoParaOpenId extends WebSecurityConfigurerAdapter {
-
-		@Autowired
-		@Qualifier("googleOpenIdRestTemplate")
-		private OAuth2RestOperations openidRestTemplate;
-
-		@Autowired
-		private ObjectMapper jsonMapper;
-
-		@Autowired
-		private RepositorioDeUsuarios repositorioDeUsuarios;
-
-		@Bean
-		public OpenIdConnectFilter openIdConnectFilter() {
-			OpenIdConnectFilter filter = new OpenIdConnectFilter("/google/callback");
-
-			filter.setRestTemplate(openidRestTemplate);
-			filter.setJsonMapper(jsonMapper);
-			filter.setRepositorioDeUsuarios(repositorioDeUsuarios);
-
-			return filter;
-		}
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			String[] caminhosPermitidos = new String[] {
-					"/", "/home", "/usuarios", "/google/login",
-					"/webjars/**", "/static/**", "/jquery*"
-			};
-
-			http
-				.addFilterAfter(filtroParaClientOAuth2(), AbstractPreAuthenticatedProcessingFilter.class)
-				.addFilterAfter(openIdConnectFilter(), OAuth2ClientContextFilter.class)
-				.httpBasic()
-				.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/google/callback"))
-			.and()
-				.authorizeRequests()
-				.antMatchers(caminhosPermitidos).permitAll()
-				.anyRequest().authenticated()
-			.and()
-				.logout()
-				.logoutSuccessUrl("/")
-				.permitAll()
-			.and()
-				.csrf().disable();
-		}
-
-		private OAuth2ClientContextFilter filtroParaClientOAuth2() {
-			return new OAuth2ClientContextFilter();
-		}
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		String[] caminhosPermitidos = new String[] {
+				"/", "/home", "/usuarios", "/google/login",
+				"/webjars/**", "/static/**", "/jquery*"
+		};
 
 	}
 
