@@ -79,9 +79,10 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
             clientTokenServices.saveAccessToken(oAuth2ProtectedResourceDetails, authentication, accessToken);
 
         } catch (OAuth2Exception e) {
-            BadCredentialsException bad = new BadCredentialsException("Could not obtain access token", e);
-            publish(new OAuth2AuthenticationFailureEvent(bad));
-            throw bad;
+            BadCredentialsException erro = new BadCredentialsException(
+                    "Não foi possível obter o token", e);
+            publish(new OAuth2AuthenticationFailureEvent(erro));
+            throw erro;
         }
 
         try {
@@ -100,9 +101,10 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
             return authentication;
 
         } catch (InvalidTokenException e) {
-            BadCredentialsException bad = new BadCredentialsException("Could not obtain user details from token", e);
-            publish(new OAuth2AuthenticationFailureEvent(bad));
-            throw bad;
+            BadCredentialsException erro = new BadCredentialsException(
+                    "Não foi possível obter os detalhes do token", e);
+            publish(new OAuth2AuthenticationFailureEvent(erro));
+            throw erro;
         }
     }
 
@@ -116,10 +118,6 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
             throw new RuntimeException(e);
         }
 
-    }
-
-    private Date obterDatetime(long timestamp) {
-        return new Date(timestamp * 1000);
     }
 
     private void publish(ApplicationEvent event) {
