@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+    <link href="webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+</head>
+
+<body>
+
+    <br/>
+    <div class="container">
+        <div class="jumbotron">
+
+            <h1>Client</h1>
+            <p>
+               A rede social profissional do momento
+            </p>
+            <p sec:authorize="isAuthenticated()">
+                <span sec:authentication="name">fulano</span>
+            </p>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-5">
+
+                <h3>Login</h3>
+                <p>
+                    Faça o login na aplicação para poder acessar sua rede social ou cadastre-se. Ao se autenticar
+                    você pode publicar conteúdos em sua linha do tempo.
+                </p>
+                <p>
+                    <div sec:authorize="not isAuthenticated()">
+                        <a class="btn btn-primary" href="/login">Login</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="btn btn-danger" href="/logout">Logout</a>
+                    </div>
+                </p>
+            </div>
+
+            <div class="col-md-5">
+
+                <h3>Acesse sua conta</h3>
+                <p>
+                    Ao acessar a conta você pode ver os conteúdos que publicou.
+                    É aqui que você também pode mostrar os livros que você já cadastrou na aplicação bookserver
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/minhaconta/principal">Minha conta</a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script src="/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</html>
