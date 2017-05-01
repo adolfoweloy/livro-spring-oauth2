@@ -88,6 +88,11 @@ public class AuthorizationCodeTokenService {
     private MultiValueMap<String, String> getBody(String authorizationCode) {
         MultiValueMap<String, String> dadosFormulario = new LinkedMultiValueMap<>();
 
+        dadosFormulario.add("grant_type",  "authorization_code");
+        dadosFormulario.add("code", authorizationCode);
+        dadosFormulario.add("scope", "read write");
+        dadosFormulario.add("redirect_uri", "http://localhost:9000/integracao/callback");
+
         return dadosFormulario;
     }
 

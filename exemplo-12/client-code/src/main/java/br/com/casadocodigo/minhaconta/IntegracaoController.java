@@ -1,8 +1,8 @@
 package br.com.casadocodigo.minhaconta;
 
 import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import br.com.casadocodigo.integracao.bookserver.AuthorizationCodeTokenService;
 import br.com.casadocodigo.integracao.bookserver.OAuth2Token;
-import br.com.casadocodigo.integracao.bookserver.PasswordTokenService;
 import br.com.casadocodigo.usuarios.AcessoBookserver;
 import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.UsuariosRepository;
@@ -22,18 +22,18 @@ public class IntegracaoController {
     private UsuariosRepository usuarios;
 
     @Autowired
-    private PasswordTokenService passwordTokenService;
+    private AuthorizationCodeTokenService authorizationCodeTokenService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView integracao() {
-        return new ModelAndView("minhaconta/integracao");
+        String endpointDeAutorizacao = authorizationCodeTokenService.getAuthorizationEndpoint();
+        return new ModelAndView("redirect:" + endpointDeAutorizacao);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView autorizar(Autorizacao autorizacao) {
+    @RequestMapping(value = "/callback", method = RequestMethod.GET)
+    public ModelAndView callback(String code, String state) {
 
-        OAuth2Token token = passwordTokenService.getToken(
-                autorizacao.getLogin(), autorizacao.getSenha());
+        OAuth2Token token = authorizationCodeTokenService.getToken(code);
 
         AcessoBookserver acessoBookserver = new AcessoBookserver();
         acessoBookserver.setAcessoToken(token.getAccessToken());
