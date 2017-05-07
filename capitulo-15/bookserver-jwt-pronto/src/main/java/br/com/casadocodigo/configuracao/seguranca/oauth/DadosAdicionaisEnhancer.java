@@ -1,6 +1,6 @@
 package br.com.casadocodigo.configuracao.seguranca.oauth;
 
-import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import br.com.casadocodigo.configuracao.seguranca.ResourceOwner;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -19,7 +19,7 @@ public class DadosAdicionaisEnhancer implements TokenEnhancer {
             OAuth2Authentication authentication) {
 
         Map<String, Object> additionalInformation = new HashMap<>();
-        UsuarioLogado usuario = (UsuarioLogado) authentication.getPrincipal();
+        ResourceOwner usuario = (ResourceOwner) authentication.getPrincipal();
         additionalInformation.put("nome_usuario", usuario.getUsuario().getNome());
 
         DefaultOAuth2AccessToken defaultAccessToken

@@ -1,7 +1,7 @@
 package br.com.casadocodigo.usuarios;
 
 import br.com.casadocodigo.livros.Livro;
-import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import br.com.casadocodigo.configuracao.seguranca.ResourceOwner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -78,7 +78,7 @@ public class UsuariosController {
 	 */
 	private void mantemUsuarioAutenticado(AuthenticationManager authenticationManager, Usuario usuario) {
 		Authentication auth = new UsernamePasswordAuthenticationToken(
-			new UsuarioLogado(usuario), usuario.getCredenciais().getSenha());
+			new ResourceOwner(usuario), usuario.getCredenciais().getSenha());
 		SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(auth));
 	}
 

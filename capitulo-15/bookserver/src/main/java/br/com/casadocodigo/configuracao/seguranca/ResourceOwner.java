@@ -10,13 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.casadocodigo.usuarios.Usuario;
 
-public class UsuarioLogado implements UserDetails {
+public class ResourceOwner implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
 	private Usuario usuario;
 
-	public UsuarioLogado(Usuario usuario) {
+	public ResourceOwner(Usuario usuario) {
 		this.usuario = usuario;
 	}
 

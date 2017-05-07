@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import br.com.casadocodigo.configuracao.seguranca.ResourceOwner;
 import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.Usuarios;
 
@@ -57,7 +57,7 @@ public class LivrosController {
 
 	private Usuario usuarioLogado() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		UsuarioLogado usuarioLogado = (UsuarioLogado) authentication.getPrincipal();
+		ResourceOwner usuarioLogado = (ResourceOwner) authentication.getPrincipal();
 
 		return usuarios.buscarPorID(usuarioLogado.getId());
 	}

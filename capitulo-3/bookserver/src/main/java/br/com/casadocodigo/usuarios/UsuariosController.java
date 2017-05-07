@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import br.com.casadocodigo.configuracao.seguranca.ResourceOwner;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -75,7 +75,7 @@ public class UsuariosController {
 	 */
 	private void mantemUsuarioAutenticado(AuthenticationManager authenticationManager, Usuario usuario) {
 		Authentication auth = new UsernamePasswordAuthenticationToken(
-			new UsuarioLogado(usuario), usuario.getCredenciais().getSenha());
+			new ResourceOwner(usuario), usuario.getCredenciais().getSenha());
 		SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(auth));
 	}
 

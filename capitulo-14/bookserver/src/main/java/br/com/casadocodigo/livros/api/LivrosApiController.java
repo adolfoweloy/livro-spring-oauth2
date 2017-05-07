@@ -1,6 +1,6 @@
 package br.com.casadocodigo.livros.api;
 
-import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import br.com.casadocodigo.configuracao.seguranca.ResourceOwner;
 import br.com.casadocodigo.livros.Estante;
 import br.com.casadocodigo.livros.Livro;
 import br.com.casadocodigo.usuarios.Usuario;
@@ -41,7 +41,7 @@ public class LivrosApiController {
 
     private Usuario usuarioLogado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UsuarioLogado usuarioLogado = (UsuarioLogado) authentication.getPrincipal();
+        ResourceOwner usuarioLogado = (ResourceOwner) authentication.getPrincipal();
 
         return usuarios.buscarPorID(usuarioLogado.getId());
     }

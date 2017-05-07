@@ -24,7 +24,7 @@ public class DadosDoUsuarioService implements UserDetailsService {
 		Optional<Usuario> usuario = usuarios.buscarPorEmail(email);
 
 		if (usuario.isPresent()) {
-			return new UsuarioLogado(usuario.get());
+			return new ResourceOwner(usuario.get());
 		} else {
 			throw new UsernameNotFoundException("usuario não autorizado");
 		}
