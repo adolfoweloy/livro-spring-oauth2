@@ -1,7 +1,7 @@
 package br.com.casadocodigo.usuarios;
 
-import br.com.casadocodigo.livros.Livro;
-import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,14 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
+import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
 
 @Controller
 @RequestMapping("/usuarios")

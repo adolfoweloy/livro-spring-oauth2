@@ -1,22 +1,19 @@
 package br.com.casadocodigo.livros;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import br.com.casadocodigo.usuarios.Usuario;
-import br.com.casadocodigo.usuarios.Usuarios;
-import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
+import br.com.casadocodigo.configuracao.seguranca.UsuarioLogado;
+import br.com.casadocodigo.usuarios.Usuario;
+import br.com.casadocodigo.usuarios.Usuarios;
 
 @Controller
 @RequestMapping("/livros")
