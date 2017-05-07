@@ -30,7 +30,7 @@ public class LivrosController {
 		ModelAndView mv = new ModelAndView("livros/principal");
 
 		mv.addObject("dadosDoLivro", new DadosDoLivro());
-		mv.addObject("livros", usuarioLogado().getEstante().todosLivros());
+		mv.addObject("livros", donoDosLivros().getEstante().todosLivros());
 
 		return mv;
 	}
@@ -39,7 +39,7 @@ public class LivrosController {
 	public ModelAndView adicionarLivro(@Valid DadosDoLivro dadosDoLivro, BindingResult bindingResult) {
 		ModelAndView mv = new ModelAndView("livros/principal");
 
-		Usuario usuario = usuarioLogado();
+		Usuario usuario = donoDosLivros();
 
 		if (bindingResult.hasErrors()) {
 			mv.addObject("livros", usuario.getEstante().todosLivros());
@@ -58,10 +58,10 @@ public class LivrosController {
 		return mv;
 	}
 
-	private Usuario usuarioLogado() {
+	private Usuario donoDosLivros() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		ResourceOwner usuarioLogado = (ResourceOwner) authentication.getPrincipal();
+		ResourceOwner donoDosLivros = (ResourceOwner) authentication.getPrincipal();
 
-		return usuarios.buscarPorID(usuarioLogado.getId());
+		return usuarios.buscarPorID(donoDosLivros.getId());
 	}
 }

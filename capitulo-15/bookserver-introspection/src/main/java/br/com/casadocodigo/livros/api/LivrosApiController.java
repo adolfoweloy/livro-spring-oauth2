@@ -29,7 +29,7 @@ public class LivrosApiController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> livros() {
 
-        Estante estante = usuarioLogado().getEstante();
+        Estante estante = donoDosLivros().getEstante();
 
         if (estante.temLivros()) {
             return new ResponseEntity<>(estante.todosLivros(), HttpStatus.OK);
@@ -39,10 +39,10 @@ public class LivrosApiController {
 
     }
 
-    private Usuario usuarioLogado() {
+    private Usuario donoDosLivros() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ResourceOwner usuarioLogado = (ResourceOwner) authentication.getPrincipal();
+        ResourceOwner donoDosLivros = (ResourceOwner) authentication.getPrincipal();
 
-        return usuarios.buscarPorID(usuarioLogado.getId());
+        return usuarios.buscarPorID(donoDosLivros.getId());
     }
 }
