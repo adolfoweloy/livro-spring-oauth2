@@ -1,14 +1,16 @@
 package br.com.casadocodigo.configuracao.seguranca;
 
-import br.com.casadocodigo.usuarios.Usuario;
+import java.util.Collection;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import br.com.casadocodigo.usuarios.Usuario;
 
 public class UsuarioLogado implements UserDetails {
+	private static final long serialVersionUID = 1L;
 
-    private Usuario usuario;
+	private Usuario usuario;
 
     public UsuarioLogado(Usuario usuario) {
         this.usuario = usuario;

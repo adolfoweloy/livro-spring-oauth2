@@ -1,9 +1,9 @@
 package br.com.casadocodigo.configuracao.seguranca;
 
+import java.util.Base64;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Base64;
 
 @AllArgsConstructor
 public class BasicAuthentication {
