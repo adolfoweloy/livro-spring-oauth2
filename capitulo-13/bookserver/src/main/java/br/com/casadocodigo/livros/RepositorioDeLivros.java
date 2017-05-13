@@ -1,11 +1,11 @@
 package br.com.casadocodigo.livros;
 
-import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class RepositorioDeLivros {

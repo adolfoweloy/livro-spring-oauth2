@@ -5,9 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import org.hibernate.validator.constraints.Range;
-
 import lombok.Getter;
+
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 public class Livro {

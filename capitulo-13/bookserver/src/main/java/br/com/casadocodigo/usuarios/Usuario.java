@@ -1,5 +1,7 @@
 package br.com.casadocodigo.usuarios;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,15 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import br.com.casadocodigo.livros.Estante;
 import lombok.Getter;
+import br.com.casadocodigo.livros.Estante;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Usuario implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Getter
 	@Id
