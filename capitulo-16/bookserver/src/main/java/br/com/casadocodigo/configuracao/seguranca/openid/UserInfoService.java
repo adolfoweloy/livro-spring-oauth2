@@ -11,6 +11,7 @@ import java.util.Map;
 @Service
 public class UserInfoService {
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
     public Map<String, String> getUserInfoFor(OAuth2AccessToken accessToken) {
         RestTemplate restTemplate = new RestTemplate();
 
@@ -19,8 +20,8 @@ public class UserInfoService {
         throw new UnsupportedOperationException("Lógica do userInfo ainda não implementada");
     }
 
-    private MultiValueMap getHeader(String accessToken) {
-        MultiValueMap httpHeaders = new HttpHeaders();
+    private MultiValueMap<String, String> getHeader(String accessToken) {
+        MultiValueMap<String, String> httpHeaders = new HttpHeaders();
 
         httpHeaders.add("Authorization", "Bearer " + accessToken);
 
