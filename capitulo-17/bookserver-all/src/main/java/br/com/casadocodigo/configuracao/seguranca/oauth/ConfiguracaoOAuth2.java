@@ -68,7 +68,6 @@ public class ConfiguracaoOAuth2 {
             .and()
                 .withClient("cliente-browser")
                 .authorizedGrantTypes("implicit")
-                .redirectUris("http://localhost:9000/integracao/implicit")
                 .scopes("read");
         }
     }
