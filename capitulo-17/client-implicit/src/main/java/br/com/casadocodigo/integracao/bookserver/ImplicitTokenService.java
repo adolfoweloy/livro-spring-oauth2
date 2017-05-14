@@ -1,14 +1,15 @@
 package br.com.casadocodigo.integracao.bookserver;
 
-import br.com.casadocodigo.configuracao.seguranca.BasicAuthentication;
-import org.springframework.stereotype.Service;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import br.com.casadocodigo.configuracao.seguranca.BasicAuthentication;
 
 @Service
 public class ImplicitTokenService {
