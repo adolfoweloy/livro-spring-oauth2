@@ -1,9 +1,9 @@
 package br.com.casadocodigo.integracao.bookserver;
 
-import br.com.casadocodigo.configuracao.seguranca.BasicAuthentication;
-import br.com.casadocodigo.integracao.model.Livro;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import br.com.casadocodigo.integracao.model.Livro;
 
 @Service
 public class BookserverService {
