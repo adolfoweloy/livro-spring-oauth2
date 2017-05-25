@@ -1,0 +1,25 @@
+server.port: 8080
+
+## define se vai utilizar a solução onde authorization server e resource server estão juntos ou separados
+## definir como true, significa que o oauth provider está todo configurado aqui na aplicação bookserver
+## definir como false, significa que essa aplicação só possui configuração para o resource server
+## -> quando está como false, para validar o token é preciso que o authorization server esteja salvando os dados do
+## -> client details em um banco de dados (ao invés de em memória).
+oauth:
+  enabled: true
+  all-in-one: false
+
+## configurações do datasource do spring
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/bookserver
+    username: bookserver
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        show_sql: true
+        hbm2ddl:
+          auto: validate
