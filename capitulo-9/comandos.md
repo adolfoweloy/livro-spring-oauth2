@@ -1,5 +1,4 @@
-http://localhost:8080/oauth/authorize?client_id=cliente-app&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A9000%2Fcallback
-
+http://localhost:8080/oauth/authorize?client_id=cliente-app&response_type=code&redirect_uri=http://localhost:9000/callback
 
 
 http://localhost:8080/oauth/authorize?client_id=cliente-app&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A9000%2Fcallback&state=teste
