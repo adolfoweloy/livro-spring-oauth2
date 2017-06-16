@@ -1,15 +1,10 @@
 package br.com.casadocodigo.integracao.bookserver;
 
-import br.com.casadocodigo.usuarios.UsuariosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
@@ -30,7 +25,6 @@ public class ConfiguracaoResource {
     private ClientTokenServices clientTokenServices;
 
     @Autowired
-    @Qualifier("oauth2ClientContext")
     private OAuth2ClientContext oauth2ClientContext;
 
     @Bean
@@ -57,8 +51,7 @@ public class ConfiguracaoResource {
     private AccessTokenRequest accessTokenRequest;
 
     @Bean
-    @Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
-    public OAuth2RestOperations oauth2RestTemplate() {
+    public OAuth2RestTemplate oauth2RestTemplate() {
 
         OAuth2ProtectedResourceDetails resourceDetails = bookserver();
 
