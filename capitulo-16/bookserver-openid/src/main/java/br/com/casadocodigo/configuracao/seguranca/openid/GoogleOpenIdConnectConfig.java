@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.AccessTokenProviderChain;
@@ -40,7 +39,7 @@ public class GoogleOpenIdConnectConfig {
     }
 
     @Bean
-    public OAuth2RestOperations googleOpenIdRestTemplate(OAuth2ClientContext clientContext) {
+    public OAuth2RestTemplate googleOpenIdRestTemplate(OAuth2ClientContext clientContext) {
         OAuth2RestTemplate template = new OAuth2RestTemplate(
             protectedResourceDetails(), clientContext);
 

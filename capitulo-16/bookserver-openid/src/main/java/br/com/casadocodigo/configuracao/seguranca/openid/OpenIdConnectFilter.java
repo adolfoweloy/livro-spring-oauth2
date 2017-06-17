@@ -1,19 +1,11 @@
 package br.com.casadocodigo.configuracao.seguranca.openid;
 
-import java.io.IOException;
-import java.util.Date;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import br.com.casadocodigo.usuarios.AutenticacaoOpenid;
 import br.com.casadocodigo.usuarios.IdentificadorDeAutorizacao;
 import br.com.casadocodigo.usuarios.RepositorioDeUsuarios;
 import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.autenticacao.UsuarioAutenticado;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +17,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2AuthenticationFailureEvent;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.ClientTokenServices;
@@ -34,12 +26,15 @@ import org.springframework.security.oauth2.common.exceptions.InvalidTokenExcepti
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter {
 
     @Setter
-    private OAuth2RestOperations restTemplate;
+    private OAuth2RestTemplate restTemplate;
 
     @Setter
     private ObjectMapper jsonMapper;

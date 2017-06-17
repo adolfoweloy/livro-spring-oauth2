@@ -2,7 +2,6 @@ package br.com.casadocodigo.integracao.bookserver;
 
 import br.com.casadocodigo.integracao.model.Livro;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -14,7 +13,7 @@ import java.util.List;
 public class BookserverService {
 
     @Autowired
-    private OAuth2RestOperations oAuth2RestTemplate;
+    private OAuth2RestTemplate oAuth2RestTemplate;
 
     public List<Livro> livrosFromCurrentUser() throws UsuarioSemAutorizacaoException {
 
