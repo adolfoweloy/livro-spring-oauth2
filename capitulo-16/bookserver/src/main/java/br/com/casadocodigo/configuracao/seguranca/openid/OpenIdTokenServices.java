@@ -1,14 +1,13 @@
 package br.com.casadocodigo.configuracao.seguranca.openid;
 
+import br.com.casadocodigo.usuarios.AutenticacaoOpenid;
 import br.com.casadocodigo.usuarios.autenticacao.UsuarioAutenticado;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.ClientTokenServices;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 
-import br.com.casadocodigo.usuarios.AutenticacaoOpenid;
 import javax.transaction.Transactional;
 
 @Service

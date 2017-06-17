@@ -17,6 +17,7 @@ public class UserInfoService {
 
         // Implementar a lógica para obter userInfo
 
+
         throw new UnsupportedOperationException("Lógica do userInfo ainda não implementada");
     }
 
