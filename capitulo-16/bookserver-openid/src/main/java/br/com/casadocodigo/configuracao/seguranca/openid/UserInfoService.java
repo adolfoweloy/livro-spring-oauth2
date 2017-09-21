@@ -20,23 +20,23 @@ public class UserInfoService {
     private DiscoveryDocument discoveryDocument;
 
     public Map<String, String> getUserInfoFor(OAuth2AccessToken accessToken) {
-        RestTemplate restTemplate = new RestTemplate();
+    RestTemplate restTemplate = new RestTemplate();
 
-        RequestEntity<MultiValueMap<String, String>> requestEntity = new RequestEntity<>(
-                getHeader(accessToken.getValue()),
-                HttpMethod.GET,
-                URI.create(discoveryDocument.getUserInfoEndpoint())
-        );
+    RequestEntity<MultiValueMap<String, String>> requestEntity = new RequestEntity<>(
+            getHeader(accessToken.getValue()),
+            HttpMethod.GET,
+            URI.create(discoveryDocument.getUserInfoEndpoint())
+    );
 
-        ResponseEntity<Map> result = restTemplate.exchange(
-                requestEntity,
-                Map.class);
+    ResponseEntity<Map> result = restTemplate.exchange(
+            requestEntity,
+            Map.class);
 
-        if (result.getStatusCode().is2xxSuccessful()) {
-            return result.getBody();
-        }
+    if (result.getStatusCode().is2xxSuccessful()) {
+        return result.getBody();
+    }
 
-        throw new RuntimeException("Não foi possível obter os dados do usuáiro");
+    throw new RuntimeException("Não foi possível obter os dados do usuário");
     }
 
     private MultiValueMap getHeader(String accessToken) {

@@ -14,17 +14,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2AuthenticationFailureEvent;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,10 +47,18 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     @Setter
     private OpenIdTokenServices tokenServices;
 
+    @Setter
+    private OAuth2ProtectedResourceDetails resourceDetails;
+
     private ApplicationEventPublisher eventPublisher;
 
-    public OpenIdConnectFilter(String defaultFilterProcessesUrl) {
-        super(defaultFilterProcessesUrl);
+    private final RequestMatcher matcherLocal;
+
+    public OpenIdConnectFilter(String defaultFilterProcessesUrl, String callback) {
+        super(new OrRequestMatcher(
+                new AntPathRequestMatcher(defaultFilterProcessesUrl),
+                new AntPathRequestMatcher(callback)));
+        this.matcherLocal = new AntPathRequestMatcher(defaultFilterProcessesUrl);
         setAuthenticationManager(new NoopAuthenticationManager());
     }
 
@@ -57,6 +69,18 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     }
 
     @Override
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+
+        if (matcherLocal.matches(request)) {
+            restTemplate.getAccessToken();
+            chain.doFilter(req, res);
+        } else {
+            super.doFilter(req, res, chain);
+        }
+    }
+
+    @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
         throws AuthenticationException, IOException, ServletException {
 
@@ -64,8 +88,6 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
 
         try {
             accessToken = restTemplate.getAccessToken();
-
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             tokenServices.saveAccessToken(accessToken);
 
         } catch (OAuth2Exception e) {
@@ -76,10 +98,10 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
         }
 
         try {
-            TokenIdClaims tokenIdClaims = obterAsClaimsDoToken(accessToken);
+            TokenIdClaims tokenIdClaims = TokenIdClaims.extrairClaims(jsonMapper, accessToken);
 
             Usuario usuario = repositorioDeUsuarios.buscarUsuarioAutenticado(
-                    new IdentificadorDeAutorizacao(tokenIdClaims.getSubjectIdentifier())).get();
+                new IdentificadorDeAutorizacao(tokenIdClaims.getSubjectIdentifier())).get();
 
             UsuarioAutenticado usuarioAutenticado = new UsuarioAutenticado(
                 usuario.getAutenticacaoOpenid(), accessToken);
@@ -96,18 +118,6 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
             publish(new OAuth2AuthenticationFailureEvent(erro));
             throw erro;
         }
-    }
-
-    private TokenIdClaims obterAsClaimsDoToken(OAuth2AccessToken accessToken) {
-        String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
-        Jwt tokenDecoded = JwtHelper.decode(idToken);
-
-        try {
-            return jsonMapper.readValue(tokenDecoded.getClaims(), TokenIdClaims.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     private void publish(ApplicationEvent event) {

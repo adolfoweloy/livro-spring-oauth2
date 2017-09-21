@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
+import java.util.Arrays;
+
 import static java.util.Arrays.asList;
 
 @Configuration
@@ -40,10 +42,14 @@ public class GoogleOpenIdConnectConfig {
         OAuth2RestTemplate template = new OAuth2RestTemplate(
             protectedResourceDetails(), clientContext);
 
-        template.setAccessTokenProvider(new AccessTokenProviderChain(
-            asList(new AuthorizationCodeAccessTokenProvider())));
+        template.setAccessTokenProvider(getAccessTokenProvider());
 
         return template;
     }
 
+    private AccessTokenProviderChain getAccessTokenProvider() {
+        AccessTokenProviderChain provider = new AccessTokenProviderChain(
+            Arrays.asList(new AuthorizationCodeAccessTokenProvider()));
+        return provider;
+    }
 }

@@ -35,12 +35,10 @@
 
                 <p>
                     <div sec:authorize="not isAuthenticated()">
-                        <a class="btn btn-primary" href="/livros/principal">Acesse com sua conta google</a>
+                        <a class="btn btn-primary" href="/google/callback">Acesse com sua conta google</a>
                     </div>
                     <div sec:authorize="isAuthenticated()">
-                        <form action="/logout" method="post">
-                            <button class="btn btn-danger" type="submit">Logout</button>
-                        </form>
+                        <a class="btn btn-danger" href="/logout">Logout</a>
                     </div>
                 </p>
             </div>

@@ -6,13 +6,10 @@ import br.com.casadocodigo.usuarios.RepositorioDeUsuarios;
 import br.com.casadocodigo.usuarios.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -31,21 +28,19 @@ public class OpenIdTokenServices {
     private UserInfoService userInfoService;
 
     public void saveAccessToken(OAuth2AccessToken accessToken) {
-
-        TokenIdClaims tokenIdClaims = obterAsClaimsDoToken(accessToken);
+        TokenIdClaims tokenIdClaims = TokenIdClaims.extrairClaims(jsonMapper, accessToken);
 
         Optional<Usuario> usuarioAutenticado = repositorioDeUsuarios.buscarUsuarioAutenticado(
-                new IdentificadorDeAutorizacao(tokenIdClaims.getSubjectIdentifier()));
+            new IdentificadorDeAutorizacao(tokenIdClaims.getSubjectIdentifier()));
 
-        // recupera um usuário que já esteja autenticado ou cria um novo caso o mesmo nao tenha se registrado
         Usuario usuario = usuarioAutenticado.orElseGet(() -> {
             Usuario novoUsuario = new Usuario(tokenIdClaims.getEmail(), tokenIdClaims.getEmail());
 
-            AutenticacaoOpenid autenticacaoOpenid = new AutenticacaoOpenid(
-                    novoUsuario,
-                    new IdentificadorDeAutorizacao(tokenIdClaims.getSubjectIdentifier()),
-                    tokenIdClaims.getIssuerIdentifier(),
-                    obterDatetime(tokenIdClaims.getExpirationTime())
+            new AutenticacaoOpenid(
+                novoUsuario,
+                new IdentificadorDeAutorizacao(tokenIdClaims.getSubjectIdentifier()),
+                tokenIdClaims.getIssuerIdentifier(),
+                obterDatetime(tokenIdClaims.getExpirationTime())
             );
 
             return novoUsuario;
@@ -64,17 +59,6 @@ public class OpenIdTokenServices {
         usuario.alterarNome(nomeDoUsuario);
 
         repositorioDeUsuarios.registrar(usuario);
-    }
-
-    private TokenIdClaims obterAsClaimsDoToken(OAuth2AccessToken accessToken) {
-        String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
-        Jwt tokenDecoded = JwtHelper.decode(idToken);
-
-        try {
-            return jsonMapper.readValue(tokenDecoded.getClaims(), TokenIdClaims.class);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
     }
 

@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
@@ -29,21 +30,26 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private OpenIdTokenServices tokenServices;
 
+	@Autowired
+	private OAuth2ProtectedResourceDetails resourceDetails;
+
 	@Bean
 	public OpenIdConnectFilter openIdConnectFilter() {
-		OpenIdConnectFilter filter = new OpenIdConnectFilter("/google/callback");
+		OpenIdConnectFilter filter = new OpenIdConnectFilter(
+			"/livros/**", "/google/callback");
 
 		filter.setRestTemplate(openidRestTemplate);
 		filter.setJsonMapper(jsonMapper);
 		filter.setRepositorioDeUsuarios(repositorioDeUsuarios);
 		filter.setTokenServices(tokenServices);
+		filter.setResourceDetails(resourceDetails);
 		return filter;
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		String[] caminhosPermitidos = new String[] {
-				"/", "/home", "/usuarios", "/google/login",
+				"/", "/home", "/usuarios", "/google/callback",
 				"/webjars/**", "/static/**", "/jquery*"
 		};
 
@@ -67,5 +73,6 @@ public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
 	private OAuth2ClientContextFilter filtroParaClientOAuth2() {
 		return new OAuth2ClientContextFilter();
 	}
+
 
 }

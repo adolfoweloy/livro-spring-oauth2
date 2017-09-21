@@ -1,9 +1,14 @@
 package br.com.casadocodigo.configuracao.seguranca.openid;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.jwt.Jwt;
+import org.springframework.security.jwt.JwtHelper;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+
+import java.io.IOException;
 
 public class TokenIdClaims {
 
@@ -39,4 +44,15 @@ public class TokenIdClaims {
 	@JsonProperty("exp")
 	private long expirationTime;
 
+	public static TokenIdClaims extrairClaims(ObjectMapper jsonMapper,  OAuth2AccessToken accessToken) {
+		String idToken = accessToken.getAdditionalInformation().get("id_token").toString();
+		Jwt tokenDecoded = JwtHelper.decode(idToken);
+
+		try {
+			return jsonMapper.readValue(tokenDecoded.getClaims(), TokenIdClaims.class);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 }
