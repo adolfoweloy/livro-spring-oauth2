@@ -33,8 +33,8 @@ spring:
 ## configuracoes open id
 ## informações encontradas no document discovery -> https://accounts.google.com/.well-known/openid-configuration
 google:
-  client_id: [coloque aqui seu client_id]
-  client_secret: [coloque aqui seu client_secret]
+  client_id: 210054471756-e2q5ia46ort3m1k284io57gv5qiuu5kk.apps.googleusercontent.com
+  client_secret: UYg71Qcfx1PUrOplwJb3tXiV
   user_authorization_uri: https://accounts.google.com/o/oauth2/v2/auth
   access_token_uri: https://www.googleapis.com/oauth2/v4/token
   redirect_uri: http://localhost:8080/google/callback

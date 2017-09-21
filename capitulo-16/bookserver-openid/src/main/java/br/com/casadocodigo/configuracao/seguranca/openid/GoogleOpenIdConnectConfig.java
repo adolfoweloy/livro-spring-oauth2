@@ -20,9 +20,6 @@ public class GoogleOpenIdConnectConfig {
     @Autowired
     private DiscoveryDocument discoveryDocument;
 
-    @Autowired
-    private OpenIdTokenServices clientTokenServices;
-
     @Bean
     public OAuth2ProtectedResourceDetails protectedResourceDetails() {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
@@ -43,16 +40,10 @@ public class GoogleOpenIdConnectConfig {
         OAuth2RestTemplate template = new OAuth2RestTemplate(
             protectedResourceDetails(), clientContext);
 
-        template.setAccessTokenProvider(getAccessTokenProviderWithClientTokenServices());
+        template.setAccessTokenProvider(new AccessTokenProviderChain(
+            asList(new AuthorizationCodeAccessTokenProvider())));
 
         return template;
-    }
-
-    private AccessTokenProviderChain getAccessTokenProviderWithClientTokenServices() {
-        AccessTokenProviderChain provider = new AccessTokenProviderChain(
-                asList(new AuthorizationCodeAccessTokenProvider()));
-        provider.setClientTokenServices(clientTokenServices);
-        return provider;
     }
 
 }

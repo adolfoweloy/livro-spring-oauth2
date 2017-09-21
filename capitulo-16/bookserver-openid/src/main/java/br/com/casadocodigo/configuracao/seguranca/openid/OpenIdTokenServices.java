@@ -1,32 +1,25 @@
 package br.com.casadocodigo.configuracao.seguranca.openid;
 
+import br.com.casadocodigo.usuarios.AutenticacaoOpenid;
+import br.com.casadocodigo.usuarios.IdentificadorDeAutorizacao;
+import br.com.casadocodigo.usuarios.RepositorioDeUsuarios;
+import br.com.casadocodigo.usuarios.Usuario;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.jwt.Jwt;
+import org.springframework.security.jwt.JwtHelper;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
-import br.com.casadocodigo.usuarios.IdentificadorDeAutorizacao;
-import br.com.casadocodigo.usuarios.autenticacao.UsuarioAutenticado;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.ClientTokenServices;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.stereotype.Service;
-
-import br.com.casadocodigo.usuarios.AutenticacaoOpenid;
-import br.com.casadocodigo.usuarios.Usuario;
-import br.com.casadocodigo.usuarios.RepositorioDeUsuarios;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javax.transaction.Transactional;
-
 @Service
 @Transactional
-public class OpenIdTokenServices implements ClientTokenServices {
+public class OpenIdTokenServices {
 
     @Autowired
     private RepositorioDeUsuarios repositorioDeUsuarios;
@@ -37,24 +30,7 @@ public class OpenIdTokenServices implements ClientTokenServices {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Override
-    public OAuth2AccessToken getAccessToken(OAuth2ProtectedResourceDetails resource,
-        Authentication authentication) {
-        if (authentication == null) return null;
-
-        UsuarioAutenticado userDetails = (UsuarioAutenticado) authentication.getPrincipal();
-        AutenticacaoOpenid autenticacaoOpenId = userDetails.getAutenticacaoOpenId();
-
-        if (autenticacaoOpenId.expirou()) {
-            return null;
-        }
-
-        return userDetails.getToken();
-    }
-
-    @Override
-    public void saveAccessToken(OAuth2ProtectedResourceDetails resource,
-        Authentication authentication, OAuth2AccessToken accessToken) {
+    public void saveAccessToken(OAuth2AccessToken accessToken) {
 
         TokenIdClaims tokenIdClaims = obterAsClaimsDoToken(accessToken);
 
@@ -77,10 +53,8 @@ public class OpenIdTokenServices implements ClientTokenServices {
 
         // se a conta do usuario expirou, atualiza com a nova data de validade
         if (usuario.getAutenticacaoOpenid().expirou()) {
-
             AutenticacaoOpenid autenticacaoOpenid = usuario.getAutenticacaoOpenid();
             autenticacaoOpenid.setValidade(obterDatetime(tokenIdClaims.getExpirationTime()));
-
         }
 
         // acessando o endpoint userinfo para obter o nome do usuário
@@ -108,9 +82,4 @@ public class OpenIdTokenServices implements ClientTokenServices {
         return new Date(timestamp * 1000);
     }
 
-    @Override
-    public void removeAccessToken(OAuth2ProtectedResourceDetails resource,
-        Authentication authentication) {
-        throw new UnsupportedOperationException("Operação não suportada ainda");
-    }
 }

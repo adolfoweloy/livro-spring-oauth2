@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.ClientTokenServices;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
@@ -30,12 +28,6 @@ public class ConfiguracaoDeSeguranca {
 		@Autowired
 		private RepositorioDeUsuarios repositorioDeUsuarios;
 
-		@Autowired
-		private ClientTokenServices clientTokenServices;
-
-		@Autowired
-		private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
-
 		@Bean
 		public OpenIdConnectFilter openIdConnectFilter() {
 			OpenIdConnectFilter filter = new OpenIdConnectFilter("/google/callback");
@@ -43,8 +35,6 @@ public class ConfiguracaoDeSeguranca {
 			filter.setRestTemplate(openidRestTemplate);
 			filter.setJsonMapper(jsonMapper);
 			filter.setRepositorioDeUsuarios(repositorioDeUsuarios);
-			filter.setClientTokenServices(clientTokenServices);
-			filter.setOAuth2ProtectedResourceDetails(oAuth2ProtectedResourceDetails);
 			return filter;
 		}
 

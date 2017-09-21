@@ -19,8 +19,6 @@ import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2AuthenticationFailureEvent;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
-import org.springframework.security.oauth2.client.token.ClientTokenServices;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
@@ -43,10 +41,7 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
     private RepositorioDeUsuarios repositorioDeUsuarios;
 
     @Setter
-    private ClientTokenServices clientTokenServices;
-
-    @Setter
-    private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
+    private OpenIdTokenServices tokenServices;
 
     private ApplicationEventPublisher eventPublisher;
 
@@ -71,7 +66,7 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
             accessToken = restTemplate.getAccessToken();
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            clientTokenServices.saveAccessToken(oAuth2ProtectedResourceDetails, authentication, accessToken);
+            tokenServices.saveAccessToken(accessToken);
 
         } catch (OAuth2Exception e) {
             BadCredentialsException erro = new BadCredentialsException(
