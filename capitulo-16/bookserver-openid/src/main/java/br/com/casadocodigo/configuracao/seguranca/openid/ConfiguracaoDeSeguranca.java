@@ -13,59 +13,59 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
+@Configuration
 @EnableWebSecurity
-public class ConfiguracaoDeSeguranca {
+public class ConfiguracaoDeSeguranca extends WebSecurityConfigurerAdapter {
 
-	@Configuration
-	public static class ConfiguracaoParaOpenId extends WebSecurityConfigurerAdapter {
+	@Autowired
+	private OAuth2RestTemplate openidRestTemplate;
 
-		@Autowired
-		private OAuth2RestTemplate openidRestTemplate;
+	@Autowired
+	private ObjectMapper jsonMapper;
 
-		@Autowired
-		private ObjectMapper jsonMapper;
+	@Autowired
+	private RepositorioDeUsuarios repositorioDeUsuarios;
 
-		@Autowired
-		private RepositorioDeUsuarios repositorioDeUsuarios;
+	@Autowired
+	private OpenIdTokenServices tokenServices;
 
-		@Bean
-		public OpenIdConnectFilter openIdConnectFilter() {
-			OpenIdConnectFilter filter = new OpenIdConnectFilter("/google/callback");
+	@Bean
+	public OpenIdConnectFilter openIdConnectFilter() {
+		OpenIdConnectFilter filter = new OpenIdConnectFilter("/google/callback");
 
-			filter.setRestTemplate(openidRestTemplate);
-			filter.setJsonMapper(jsonMapper);
-			filter.setRepositorioDeUsuarios(repositorioDeUsuarios);
-			return filter;
-		}
+		filter.setRestTemplate(openidRestTemplate);
+		filter.setJsonMapper(jsonMapper);
+		filter.setRepositorioDeUsuarios(repositorioDeUsuarios);
+		filter.setTokenServices(tokenServices);
+		return filter;
+	}
 
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			String[] caminhosPermitidos = new String[] {
-					"/", "/home", "/usuarios", "/google/login",
-					"/webjars/**", "/static/**", "/jquery*"
-			};
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		String[] caminhosPermitidos = new String[] {
+				"/", "/home", "/usuarios", "/google/login",
+				"/webjars/**", "/static/**", "/jquery*"
+		};
 
-			http
-				.addFilterAfter(filtroParaClientOAuth2(), AbstractPreAuthenticatedProcessingFilter.class)
-				.addFilterAfter(openIdConnectFilter(), OAuth2ClientContextFilter.class)
-				.httpBasic()
-				.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/google/callback"))
-			.and()
-				.authorizeRequests()
-				.antMatchers(caminhosPermitidos).permitAll()
-				.anyRequest().authenticated()
-			.and()
-				.logout()
-				.logoutSuccessUrl("/")
-				.permitAll()
-			.and()
-				.csrf().disable();
-		}
+		http
+			.addFilterAfter(filtroParaClientOAuth2(), AbstractPreAuthenticatedProcessingFilter.class)
+			.addFilterAfter(openIdConnectFilter(), OAuth2ClientContextFilter.class)
+			.httpBasic()
+			.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/google/callback"))
+		.and()
+			.authorizeRequests()
+			.antMatchers(caminhosPermitidos).permitAll()
+			.anyRequest().authenticated()
+		.and()
+			.logout()
+			.logoutSuccessUrl("/")
+			.permitAll()
+		.and()
+			.csrf().disable();
+	}
 
-		private OAuth2ClientContextFilter filtroParaClientOAuth2() {
-			return new OAuth2ClientContextFilter();
-		}
-
+	private OAuth2ClientContextFilter filtroParaClientOAuth2() {
+		return new OAuth2ClientContextFilter();
 	}
 
 }
