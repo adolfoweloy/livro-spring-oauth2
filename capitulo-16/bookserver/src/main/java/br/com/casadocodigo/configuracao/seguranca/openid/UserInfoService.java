@@ -21,7 +21,7 @@ public class UserInfoService {
         throw new UnsupportedOperationException("Lógica do userInfo ainda não implementada");
     }
 
-    private MultiValueMap<String, String> getHeader(String accessToken) {
+    private MultiValueMap getHeader(String accessToken) {
         MultiValueMap<String, String> httpHeaders = new HttpHeaders();
 
         httpHeaders.add("Authorization", "Bearer " + accessToken);

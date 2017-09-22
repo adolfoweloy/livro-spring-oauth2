@@ -16,9 +16,8 @@ public class OpenIdConnectFilter extends AbstractAuthenticationProcessingFilter 
 
     private ApplicationEventPublisher eventPublisher;
 
-    public OpenIdConnectFilter(String defaultFilterProcessesUrl) {
+    protected OpenIdConnectFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
-        setAuthenticationManager(new NoopAuthenticationManager());
     }
 
     @Override
