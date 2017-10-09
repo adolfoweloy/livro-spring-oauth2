@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>bookserver-client</title>
+    <link href="../webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+</head>
+<body>
+
+<br/>
+<div class="container">
+
+    <div class="jumbotron">
+        <h1>Client</h1>
+    </div>
+
+    <h3><span sec:authentication="name">fulano</span>, faça aqui a integração com o bookserver</h3>
+
+    <hr/>
+
+    <h4>
+        Forneça as credenciais do bookserver para que possamos recuperar seus livros
+    </h4>
+    <form th:action="@{/integracao}" method="post">
+        <div class="form-group">
+            <label>Login: <input class="form-control" type="text" name="login"/> </label>
+        </div>
+
+        <div class="form-group">
+            <label>Senha: <input class="form-control" type="password" name="senha"/> </label>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="button" class="btn btn-default" onclick="javascript: window.location.href='/home'">Home</button>
+        </div>
+    </form>
+
+</div>
+</body>
+
+<script src="/jquery.min.js"></script>
+<script src="../webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</html>
