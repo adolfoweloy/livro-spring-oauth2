@@ -20,17 +20,17 @@ public class ConfiguracaoDeSeguranca {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             String[] caminhosPermitidos = new String[] {
-                "/", "/home", "/usuarios",
-                "/webjars/**", "/static/**", "/jquery*"
+                "/webjars/**", "/css/**", "/static/**", "/jquery*"
             };
 
             // @formatter:off
             http
                 .authorizeHttpRequests(authz -> authz
                     .requestMatchers(caminhosPermitidos).permitAll()
+                    .requestMatchers("/", "/login", "/home", "/usuarios").permitAll()
                     .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
+                .formLogin(login -> login
                     .loginPage("/login")
                     .defaultSuccessUrl("/livros/principal", true)
                     .failureUrl("/login?error=true")
@@ -47,10 +47,6 @@ public class ConfiguracaoDeSeguranca {
             return http.build();
         }
 
-        @Bean
-        public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-            return authenticationConfiguration.getAuthenticationManager();
-        }
 
         @Bean
         public PasswordEncoder passwordEncoder() {

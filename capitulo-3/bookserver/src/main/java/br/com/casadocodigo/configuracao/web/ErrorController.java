@@ -18,7 +18,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         
         if (status != null) {
-            Integer statusCode = Integer.valueOf(status.toString());
+            var statusCode = Integer.parseInt(status.toString());
             
             if (statusCode == 403) {
                 return "redirect:/login?error=access_denied";
