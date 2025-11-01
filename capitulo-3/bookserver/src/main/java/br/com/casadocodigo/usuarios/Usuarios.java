@@ -17,10 +17,8 @@ public class Usuarios {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Usuario registrar(Usuario novoUsuario) {
+	public void registrar(Usuario novoUsuario) {
 		em.persist(novoUsuario);
-
-		return novoUsuario;
 	}
 
 	public Usuario buscarPorID(int id) {
@@ -28,14 +26,14 @@ public class Usuarios {
 	}
 
 	public Optional<Usuario> buscarPorEmail(String email) {
-		TypedQuery<Usuario> query = em.createQuery(
+		var query = em.createQuery(
 			"select u from Usuario u where u.credenciais.email = :email",
 			Usuario.class);
 
 		query.setParameter("email", email);
 
 		try {
-			Usuario usuario = query.getSingleResult();
+			var usuario = query.getSingleResult();
 			return Optional.of(usuario);
 		} catch (NoResultException e) {
 			return Optional.empty();

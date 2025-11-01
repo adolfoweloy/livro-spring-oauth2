@@ -24,16 +24,16 @@
 
     <form action="#" th:action="@{/livros/principal}" th:object="${dadosDoLivro}" method="post">
         <div class="row">
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2" th:classappend="${#fields.hasErrors('titulo')} ? 'has-error' : ''">
                 <label for="titulo">Título:</label>
                 <input class="form-control" id="titulo" type="text" th:field="*{titulo}"/>
-                <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">preencher o titulo</div>
+                <span class="help-block" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro no título</span>
             </div>
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-2" th:classappend="${#fields.hasErrors('nota')} ? 'has-error' : ''">
                 <label for="nota">Nota:</label>
                 <input class="form-control" id="nota" type="text" th:field="*{nota}"/>
-                <div th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">preencher a nota</div>
+                <span class="help-block" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">Erro na nota</span>
             </div>
 
         </div>

@@ -37,8 +37,8 @@ public class LivrosController {
     @PostMapping("/principal")
 	public ModelAndView adicionarLivro(
         @Valid DadosDoLivro dadosDoLivro,
-        @AuthenticationPrincipal ResourceOwner resourceOwner,
-        BindingResult bindingResult
+        BindingResult bindingResult,
+        @AuthenticationPrincipal ResourceOwner resourceOwner
     ) {
 		var mv = new ModelAndView("livros/principal");
 

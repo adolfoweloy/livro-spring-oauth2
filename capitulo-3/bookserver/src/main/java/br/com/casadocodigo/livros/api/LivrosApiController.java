@@ -1,30 +1,28 @@
 package br.com.casadocodigo.livros.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import br.com.casadocodigo.configuracao.seguranca.ResourceOwner;
-import br.com.casadocodigo.livros.Estante;
 import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.Usuarios;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/livros")
 public class LivrosApiController {
 
-    @Autowired
-    private Usuarios usuarios;
+    private final Usuarios usuarios;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<?> livros() {
+    LivrosApiController(Usuarios usuarios) {
+        this.usuarios = usuarios;
+    }
 
-        Estante estante = donoDosLivros().getEstante();
+    @GetMapping
+    public ResponseEntity<?> livros(@AuthenticationPrincipal ResourceOwner resourceOwner) {
+        var estante = donoDosLivros(resourceOwner).getEstante();
 
         if (estante.temLivros()) {
             return new ResponseEntity<>(estante.todosLivros(), HttpStatus.OK);
@@ -34,10 +32,7 @@ public class LivrosApiController {
 
     }
 
-    private Usuario donoDosLivros() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ResourceOwner donoDosLivros = (ResourceOwner) authentication.getPrincipal();
-
-        return usuarios.buscarPorID(donoDosLivros.getId());
+    private Usuario donoDosLivros(ResourceOwner resourceOwner) {
+        return usuarios.buscarPorID(resourceOwner.getId());
     }
 }

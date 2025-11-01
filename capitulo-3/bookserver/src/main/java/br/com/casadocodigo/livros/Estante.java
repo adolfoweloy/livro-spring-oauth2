@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 
 import lombok.Getter;
 import br.com.casadocodigo.usuarios.Usuario;
+import lombok.Setter;
 
 @Entity
 public class Estante {
@@ -25,7 +26,9 @@ public class Estante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @Getter
+	@Setter
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Usuario usuario;
 
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -33,7 +36,7 @@ public class Estante {
 	private List<Livro> livros = new ArrayList<>();
 
 	public boolean temLivros() {
-		return livros.size() > 0;
+		return !livros.isEmpty();
 	}
 
 	public Collection<Livro> todosLivros() {
@@ -44,7 +47,4 @@ public class Estante {
 		livros.add(livro);
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 }
