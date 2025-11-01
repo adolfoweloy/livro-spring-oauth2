@@ -4,8 +4,9 @@ import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -27,7 +28,7 @@ public class UsuariosController {
 	 * Tela de cadastro
 	 * @return ModelAndView
 	 */
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public ModelAndView cadastro() {
 		ModelAndView mv = new ModelAndView("usuarios/cadastro");
 
@@ -42,7 +43,7 @@ public class UsuariosController {
 	 * @param dadosDeRegistro user registration data
 	 * @return ModelAndView
 	 */
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	public ModelAndView registrar(@Valid DadosDeRegistro dadosDeRegistro, BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {

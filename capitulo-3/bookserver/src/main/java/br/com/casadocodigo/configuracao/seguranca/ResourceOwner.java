@@ -9,8 +9,6 @@ import br.com.casadocodigo.usuarios.Usuario;
 
 public record ResourceOwner(Usuario usuario) implements UserDetails {
 
-    private static final long serialVersionUID = 1L;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

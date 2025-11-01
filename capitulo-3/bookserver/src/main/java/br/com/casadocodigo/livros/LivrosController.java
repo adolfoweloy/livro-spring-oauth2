@@ -1,41 +1,48 @@
 package br.com.casadocodigo.livros;
 
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
 import br.com.casadocodigo.configuracao.seguranca.ResourceOwner;
 import br.com.casadocodigo.usuarios.Usuario;
 import br.com.casadocodigo.usuarios.Usuarios;
+import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/livros")
 public class LivrosController {
 
-	@Autowired
-	private Usuarios usuarios;
+	private final Usuarios usuarios;
 
-	@RequestMapping(value = "/principal", method = RequestMethod.GET)
-	public ModelAndView principal() {
-		ModelAndView mv = new ModelAndView("livros/principal");
+    LivrosController(Usuarios usuarios) {
+        this.usuarios = usuarios;
+    }
+
+    @GetMapping("/principal")
+	public ModelAndView principal(
+        @AuthenticationPrincipal ResourceOwner resourceOwner
+    ) {
+		var mv = new ModelAndView("livros/principal");
 
 		mv.addObject("dadosDoLivro", new DadosDoLivro());
-		mv.addObject("livros", donoDosLivros().getEstante().todosLivros());
+		mv.addObject("livros", donoDosLivros(resourceOwner).getEstante().todosLivros());
 
 		return mv;
 	}
 
-	@RequestMapping(value = "/principal", method = RequestMethod.POST)
-	public ModelAndView adicionarLivro(@Valid DadosDoLivro dadosDoLivro, BindingResult bindingResult) {
-		ModelAndView mv = new ModelAndView("livros/principal");
+    @PostMapping("/principal")
+	public ModelAndView adicionarLivro(
+        @Valid DadosDoLivro dadosDoLivro,
+        @AuthenticationPrincipal ResourceOwner resourceOwner,
+        BindingResult bindingResult
+    ) {
+		var mv = new ModelAndView("livros/principal");
 
-		Usuario usuario = donoDosLivros();
+		var usuario = donoDosLivros(resourceOwner);
 
 		if (bindingResult.hasErrors()) {
 			mv.addObject("livros", usuario.getEstante().todosLivros());
@@ -43,7 +50,7 @@ public class LivrosController {
 			return mv;
 		}
 
-		Livro novoLivro = new Livro(dadosDoLivro.getTitulo(), dadosDoLivro.getNota());
+		var novoLivro = new Livro(dadosDoLivro.getTitulo(), dadosDoLivro.getNota());
 		usuario.getEstante().adicionar(novoLivro);
 
 		usuarios.atualizar(usuario);
@@ -54,10 +61,7 @@ public class LivrosController {
 		return mv;
 	}
 
-	private Usuario donoDosLivros() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		ResourceOwner donoDosLivros = (ResourceOwner) authentication.getPrincipal();
-
-		return usuarios.buscarPorID(donoDosLivros.getId());
+	private Usuario donoDosLivros(ResourceOwner resourceOwner) {
+		return usuarios.buscarPorID(resourceOwner.getId());
 	}
 }
