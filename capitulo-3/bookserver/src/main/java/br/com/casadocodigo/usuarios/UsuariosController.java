@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,9 @@ public class UsuariosController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/**
 	 * Tela de cadastro
@@ -50,15 +54,19 @@ public class UsuariosController {
 			return new ModelAndView("usuarios/cadastro");
 		}
 
+		// Encode the password before creating the user
+		String encodedPassword = passwordEncoder.encode(dadosDeRegistro.getSenha());
+
 		// cria um usuario no sistema
 		Usuario usuario = new Usuario(dadosDeRegistro.getNome(),
-			new Credenciais(dadosDeRegistro.getEmail(), dadosDeRegistro.getSenha()));
+			new Credenciais(dadosDeRegistro.getEmail(), encodedPassword));
 
 		// persiste os dados do usuario
 		usuarios.registrar(usuario);
 
 		// autentica o usuário recem-registrado para que o mesmo nao precise fazer o login
-		mantemUsuarioAutenticado(authenticationManager, usuario);
+		// Use the original plain text password for authentication
+		mantemUsuarioAutenticado(authenticationManager, usuario, dadosDeRegistro.getSenha());
 
 		// usuário cadastrado é redirecionado para página de controle de livros
 		ModelAndView mv = new ModelAndView("redirect:/livros/principal");
@@ -71,10 +79,11 @@ public class UsuariosController {
 	 * o usuário não precise se autenticar assim que se cadastra.
 	 * @param authenticationManager
 	 * @param usuario
+	 * @param plainTextPassword - the original plain text password for authentication
 	 */
-	private void mantemUsuarioAutenticado(AuthenticationManager authenticationManager, Usuario usuario) {
+	private void mantemUsuarioAutenticado(AuthenticationManager authenticationManager, Usuario usuario, String plainTextPassword) {
 		Authentication auth = new UsernamePasswordAuthenticationToken(
-			new ResourceOwner(usuario), usuario.getCredenciais().getSenha());
+			new ResourceOwner(usuario), plainTextPassword);
 		SecurityContextHolder.getContext().setAuthentication(authenticationManager.authenticate(auth));
 	}
 
