@@ -1,6 +1,6 @@
 package br.com.casadocodigo.usuarios;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 import lombok.Getter;
 
