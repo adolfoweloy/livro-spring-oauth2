@@ -9,4 +9,5 @@ target/
 bin/
 build/
 src/main/webapp/assets/bower_components/
+worktree/
 .DS_Store
