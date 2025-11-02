@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.w3.org/1999/xhtml"
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-    <link href="webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
 </head>
 
 <body>
@@ -57,8 +57,11 @@
         </div>
     </div>
 
+<!-- jQuery is required for Bootstrap 3.3.5 -->
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
 </body>
 
-<script src="webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 </html>

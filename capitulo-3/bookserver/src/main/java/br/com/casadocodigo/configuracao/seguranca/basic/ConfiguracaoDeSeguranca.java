@@ -1,5 +1,6 @@
 package br.com.casadocodigo.configuracao.seguranca.basic;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,15 +18,10 @@ public class ConfiguracaoDeSeguranca {
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            String[] caminhosPermitidos = new String[] {
-                "/webjars/**", "/css/**", "/static/**", "/jquery*"
-            };
-
             // @formatter:off
             http
                 .authorizeHttpRequests(authz -> authz
-                    .requestMatchers(caminhosPermitidos).permitAll()
-                    .requestMatchers("/", "/login", "/home", "/usuarios").permitAll()
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
