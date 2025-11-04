@@ -22,6 +22,7 @@ public class ConfiguracaoDeSeguranca {
             http
                 .authorizeHttpRequests(authz -> authz
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                    .requestMatchers("/usuarios", "/usuarios/**").permitAll()
                     .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

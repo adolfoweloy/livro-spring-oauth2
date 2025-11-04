@@ -5,15 +5,15 @@
 <head>
     <title>bookserver-client</title>
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" media="screen" />
 </head>
 <body>
 
-<br/>
-<div class="container">
+<div class="container mt-5">
 
-    <div class="jumbotron">
-        <h1>Bookserver</h1>
-        <p>
+    <div class="jumbotron py-5 mb-4">
+        <h1 class="display-4">Bookserver</h1>
+        <p class="lead">
             Esse é o sistema onde você registra os livros que já leu!!!
         </p>
     </div>
@@ -21,16 +21,14 @@
     <!-- Registration success message -->
     <div th:if="${param.registered}">
         <div class="alert alert-success" role="alert">
-            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>=
-            Cadastro realizado com sucesso! Faça login com suas credenciais.
+            ✓ Cadastro realizado com sucesso! Faça login com suas credenciais.
         </div>
     </div>
 
     <!-- Error messages -->
     <div th:if="${param.error}">
         <div class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
+            ⚠
             <span th:if="${param.error[0] == 'access_denied'}">Acesso negado. Você não tem permissão para acessar este recurso.</span>
             <span th:if="${param.error[0] == 'auth_failed'}">Falha na autenticação. Tente novamente.</span>
             <span th:if="${param.error[0] == 'true'}">Usuário ou senha inválidos</span>
@@ -40,38 +38,39 @@
     <!-- Logout success message -->
     <div th:if="${param.logout}">
         <div class="alert alert-success" role="alert">
-            <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>
-            Logout realizado com sucesso!
+            ✓ Logout realizado com sucesso!
         </div>
     </div>
 
     <h2>Login</h2>
 
     <form th:action="@{/login}" method="post">
-        <div class="form-group">
-            <label> Login: <input class="form-control" type="text" name="username" required/> </label>
+        <div class="mb-3">
+            <label for="username" class="form-label">Login:</label>
+            <input class="form-control" id="username" type="text" name="username" required/>
         </div>
 
-        <div class="form-group">
-            <label> Senha: <input class="form-control" type="password" name="password" required/> </label>
+        <div class="mb-3">
+            <label for="password" class="form-label">Senha:</label>
+            <input class="form-control" id="password" type="password" name="password" required/>
         </div>
 
-        <div class="form-group">
-                <button type="submit" class="btn btn-primary">Enviar</button>
-                <button type="button" class="btn btn-default" onclick="window.location.href='/home'">Voltar</button>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/home'">Voltar</button>
         </div>
 
         <p>
             Não tem conta? <a href="/usuarios">Faça seu cadastro</a><br/>
         </p>
-
     </form>
 
 </div>
 
-<!-- jQuery is required for Bootstrap 3.3.5 -->
+<!-- jQuery and Bootstrap 5.3.7 -->
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
 </body>
+
 </html>
