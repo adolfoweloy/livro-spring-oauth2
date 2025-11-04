@@ -3,15 +3,15 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>bookserver-client</title>
-    <link href="../webjars/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" media="screen" />
 </head>
 <body>
 
-<br/>
-<div class="container">
+<div class="container mt-5">
 
-    <div class="jumbotron">
-        <h1>Bookserver</h1>
+    <div class="jumbotron py-5 mb-4">
+        <h1 class="display-4">Bookserver</h1>
     </div>
 
     <h3>Conta de <span sec:authentication="name">fulano</span></h3>
@@ -24,20 +24,24 @@
 
     <form action="#" th:action="@{/livros/principal}" th:object="${dadosDoLivro}" method="post">
         <div class="row">
-            <div class="form-group col-md-2">
-                <label for="titulo">Título:</label>
-                <input class="form-control" id="titulo" type="text" th:field="*{titulo}"/>
-                <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">preencher o titulo</div>
+            <div class="col-md-2">
+                <div class="mb-3" th:classappend="${#fields.hasErrors('titulo')} ? 'has-error' : ''">
+                    <label for="titulo" class="form-label">Título:</label>
+                    <input class="form-control" id="titulo" type="text" th:field="*{titulo}"/>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro no título</div>
+                </div>
             </div>
 
-            <div class="form-group col-md-2">
-                <label for="nota">Nota:</label>
-                <input class="form-control" id="nota" type="text" th:field="*{nota}"/>
-                <div th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">preencher a nota</div>
+            <div class="col-md-2">
+                <div class="mb-3" th:classappend="${#fields.hasErrors('nota')} ? 'has-error' : ''">
+                    <label for="nota" class="form-label">Nota:</label>
+                    <input class="form-control" id="nota" type="text" th:field="*{nota}"/>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}">Erro na nota</div>
+                </div>
             </div>
-
         </div>
-        <div class="form-group">
+
+        <div class="mb-3">
             <button class="btn btn-primary" type="submit">Adicionar livro</button>
         </div>
 
@@ -51,33 +55,37 @@
         </h4>
 
         <table class="table">
-            <tr>
-                <td>titulo</td>
-                <td>nota</td>
-            </tr>
-            <tr th:each="livro : ${livros}">
-                <td th:text="${livro.titulo}">titulo</td>
-                <td th:text="${livro.nota}">nota</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>titulo</th>
+                    <th>nota</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="livro : ${livros}">
+                    <td th:text="${livro.titulo}">titulo</td>
+                    <td th:text="${livro.nota}">nota</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
     <div th:if="${#lists.isEmpty(livros)}">
         <div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            Você ainda não tem livros cadastrados!
+            ℹ Você ainda não tem livros cadastrados!
         </div>
     </div>
 
-    <h4/>
-
-    <button class="btn btn-default" type="button" onclick="javascript: window.location.href='/home'">Voltar</button>
+    <div class="mb-3">
+        <button class="btn btn-secondary" type="button" onclick="window.location.href='/home'">Voltar</button>
+    </div>
 
 </div>
-</body>
 
-<script src="/jquery.min.js"></script>
-<script src="../webjars/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- jQuery and Bootstrap 5.3.7 -->
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
 
 </html>

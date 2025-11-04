@@ -12,14 +12,14 @@ oauth:
 ## configurações do datasource do spring
 spring:
   datasource:
-    url: jdbc:mysql://localhost/bookserver
+    url: jdbc:mysql://127.0.0.1:3306/bookserver
     username: bookserver
-    password: 123
-    driver-class-name: com.mysql.jdbc.Driver
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
-        hbm2ddl:
-          auto: validate
+    hibernate:
+      ddl-auto: validate

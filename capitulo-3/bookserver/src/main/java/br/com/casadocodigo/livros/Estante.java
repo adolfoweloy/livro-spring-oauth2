@@ -5,17 +5,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import lombok.Getter;
 import br.com.casadocodigo.usuarios.Usuario;
+import lombok.Setter;
 
 @Entity
 public class Estante {
@@ -25,7 +26,9 @@ public class Estante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @Getter
+	@Setter
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Usuario usuario;
 
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -33,7 +36,7 @@ public class Estante {
 	private List<Livro> livros = new ArrayList<>();
 
 	public boolean temLivros() {
-		return livros.size() > 0;
+		return !livros.isEmpty();
 	}
 
 	public Collection<Livro> todosLivros() {
@@ -44,7 +47,4 @@ public class Estante {
 		livros.add(livro);
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
 }

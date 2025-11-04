@@ -1,8 +1,8 @@
 package br.com.casadocodigo.usuarios;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.NotEmpty;
 
 public class DadosDeRegistro {
 

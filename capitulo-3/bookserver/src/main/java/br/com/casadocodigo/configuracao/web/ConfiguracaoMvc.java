@@ -4,13 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.LiteWebJarsResourceResolver;
+import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 
 @Configuration
-public class ConfiguracaoMvc extends WebMvcConfigurerAdapter {
+public class ConfiguracaoMvc implements WebMvcConfigurer {
 
     @Bean
     public SpringTemplateEngine templateEngine(SpringResourceTemplateResolver resolver) {
@@ -24,7 +25,14 @@ public class ConfiguracaoMvc extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("/static/**");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("/webjars/")
+                .setCachePeriod(0)
+                .resourceChain(true)
+                .addResolver(new LiteWebJarsResourceResolver());
+
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("/static/");
     }
 
     @Override
